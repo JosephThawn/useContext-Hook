@@ -1,29 +1,34 @@
-import { useState, createContext, useContext } from "react";
-
+import MyCounter from "../components/MyCounter";
+import { createContext, useContext, useState } from "react";
+import ComponentA from "../components/ComponentA";
+import ComponentB from "../components/ComponentB";
+//this  CounterContext.js file as a glable state
 const CounterContext = createContext();
-//implementing customer hook useCounter
+
+// //implementing customer hook useCounter
 export const useCounter = () => useContext(CounterContext);
 
 function CounterContextProvider(props) {
   const [count, setCount] = useState(0);
 
-  function increaseCount() {
+  const increaseCount = () => {
     setCount(count + 1);
-  }
-
+  };
   const decreaseCount = () => {
-    setCount((prevQty) => {
-      if (prevQty - 1 < 1) return 1;
-      return prevQty - 1;
+    setCount((count) => {
+      if (count - 1 < 1) return 1;
+      return count - 1;
     });
   };
 
-  const valueCount = { count, increaseCount, decreaseCount };
+  const valueCount = { count, setCount, increaseCount, decreaseCount };
   return (
-    <CounterContext.Provider value={{ valueCount }}>
-      {props.chlidren}
+    <CounterContext.Provider value={valueCount}>
+      {props.children}
+      <MyCounter />
+      <ComponentA />
+      <ComponentB />
     </CounterContext.Provider>
   );
 }
-
 export default CounterContextProvider;
